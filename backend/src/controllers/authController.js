@@ -6,8 +6,13 @@ const ApiError = require('../utils/ApiError');
 const register = async (req, res, next) => {
   try {
     const { name, email, password, role } = req.body;
+    const normalizedEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
 
-    const existingUser = await User.findOne({ email });
+    if (!normalizedEmail) {
+      throw new ApiError(400, 'Valid email is required');
+    }
+
+    const existingUser = await User.findOne({ email: normalizedEmail });
     if (existingUser) {
       throw new ApiError(409, 'User with this email already exists');
     }
@@ -16,7 +21,7 @@ const register = async (req, res, next) => {
 
     const user = await User.create({
       name,
-      email,
+      email: normalizedEmail,
       password: hashedPassword,
       role,
     });
@@ -41,7 +46,13 @@ const register = async (req, res, next) => {
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email });
+    const normalizedEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
+
+    if (!normalizedEmail) {
+      throw new ApiError(400, 'Valid email is required');
+    }
+
+    const user = await User.findOne({ email: normalizedEmail });
 
     if (!user) {
       throw new ApiError(401, 'Invalid email or password');

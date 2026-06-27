@@ -1,4 +1,5 @@
 const PromptChallenge = require('../models/PromptChallenge');
+const toObjectId = require('../utils/toObjectId');
 
 const createChallenge = async (req, res, next) => {
   try {
@@ -24,7 +25,8 @@ const listChallenges = async (req, res, next) => {
 
 const getChallengeById = async (req, res, next) => {
   try {
-    const challenge = await PromptChallenge.findById(req.params.id).populate('createdBy', 'name email role');
+    const challengeId = toObjectId(req.params.id);
+    const challenge = await PromptChallenge.findById(challengeId).populate('createdBy', 'name email role');
 
     if (!challenge) {
       return res.status(404).json({ message: 'Challenge not found' });
@@ -38,14 +40,24 @@ const getChallengeById = async (req, res, next) => {
 
 const updateChallenge = async (req, res, next) => {
   try {
-    const challenge = await PromptChallenge.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
+    const challengeId = toObjectId(req.params.id);
+    const allowedFields = ['title', 'promptTask', 'expectedOutcome', 'difficulty'];
+    const updates = {};
+
+    allowedFields.forEach((field) => {
+      if (Object.prototype.hasOwnProperty.call(req.body, field)) {
+        updates[field] = req.body[field];
+      }
     });
+
+    const challenge = await PromptChallenge.findById(challengeId);
 
     if (!challenge) {
       return res.status(404).json({ message: 'Challenge not found' });
     }
+
+    Object.assign(challenge, updates);
+    await challenge.save();
 
     return res.status(200).json({ message: 'Challenge updated', challenge });
   } catch (error) {
@@ -55,7 +67,8 @@ const updateChallenge = async (req, res, next) => {
 
 const deleteChallenge = async (req, res, next) => {
   try {
-    const challenge = await PromptChallenge.findByIdAndDelete(req.params.id);
+    const challengeId = toObjectId(req.params.id);
+    const challenge = await PromptChallenge.findByIdAndDelete(challengeId);
 
     if (!challenge) {
       return res.status(404).json({ message: 'Challenge not found' });

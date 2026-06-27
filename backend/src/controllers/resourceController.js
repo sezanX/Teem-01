@@ -1,4 +1,5 @@
 const LearningResource = require('../models/LearningResource');
+const toObjectId = require('../utils/toObjectId');
 
 const createResource = async (req, res, next) => {
   try {
@@ -24,7 +25,8 @@ const listResources = async (req, res, next) => {
 
 const getResourceById = async (req, res, next) => {
   try {
-    const resource = await LearningResource.findById(req.params.id).populate('createdBy', 'name email role');
+    const resourceId = toObjectId(req.params.id);
+    const resource = await LearningResource.findById(resourceId).populate('createdBy', 'name email role');
 
     if (!resource) {
       return res.status(404).json({ message: 'Resource not found' });
@@ -38,14 +40,24 @@ const getResourceById = async (req, res, next) => {
 
 const updateResource = async (req, res, next) => {
   try {
-    const resource = await LearningResource.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
+    const resourceId = toObjectId(req.params.id);
+    const allowedFields = ['title', 'description', 'level', 'category', 'isPublished'];
+    const updates = {};
+
+    allowedFields.forEach((field) => {
+      if (Object.prototype.hasOwnProperty.call(req.body, field)) {
+        updates[field] = req.body[field];
+      }
     });
+
+    const resource = await LearningResource.findById(resourceId);
 
     if (!resource) {
       return res.status(404).json({ message: 'Resource not found' });
     }
+
+    Object.assign(resource, updates);
+    await resource.save();
 
     return res.status(200).json({ message: 'Resource updated', resource });
   } catch (error) {
@@ -55,7 +67,8 @@ const updateResource = async (req, res, next) => {
 
 const deleteResource = async (req, res, next) => {
   try {
-    const resource = await LearningResource.findByIdAndDelete(req.params.id);
+    const resourceId = toObjectId(req.params.id);
+    const resource = await LearningResource.findByIdAndDelete(resourceId);
 
     if (!resource) {
       return res.status(404).json({ message: 'Resource not found' });
