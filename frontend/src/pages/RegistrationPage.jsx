@@ -156,7 +156,7 @@ const RegistrationPage = () => {
             </div>
             <div className="ml-2 text-sm">
               <label htmlFor="terms" className="text-gray-600">
-                I agree to the <a href="#" className="text-primary hover:underline">Terms of Service</a> and <a href="#" className="text-primary hover:underline">Privacy Policy</a>
+                I agree to the <Link to="/terms" className="text-primary hover:underline">Terms of Service</Link> and <Link to="/privacy" className="text-primary hover:underline">Privacy Policy</Link>
               </label>
             </div>
           </div>

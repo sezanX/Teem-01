@@ -28,8 +28,8 @@ const MainLayout = () => {
             <nav className="hidden md:flex space-x-8">
               {!isAuthenticated ? (
                 <>
-                  <Link to="/#features" className="text-gray-500 hover:text-gray-900">Features</Link>
-                  <Link to="/#how-it-works" className="text-gray-500 hover:text-gray-900">How it Works</Link>
+                  <a href="/#features" className="text-gray-500 hover:text-gray-900">Features</a>
+                  <a href="/#how-it-works" className="text-gray-500 hover:text-gray-900">How it Works</a>
                   <Link to="/login" className="text-gray-500 hover:text-gray-900 font-medium">Login</Link>
                   <Link to="/register" className="bg-dark text-white px-4 py-2 rounded-md hover:bg-gray-800 transition-colors">
                     Get Started
