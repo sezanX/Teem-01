@@ -37,6 +37,9 @@ const MainLayout = () => {
                 </>
               ) : (
                 <div className="flex items-center space-x-4">
+                  {user?.role === 'admin' && (
+                    <Link to="/admin" className="text-primary font-bold hover:text-blue-700">Admin Panel</Link>
+                  )}
                   <Link to="/dashboard" className="text-gray-500 hover:text-gray-900">Dashboard</Link>
                   <Link to="/modules" className="text-gray-500 hover:text-gray-900">Modules</Link>
                   <Link to="/playground" className="text-gray-500 hover:text-gray-900">Playground</Link>
