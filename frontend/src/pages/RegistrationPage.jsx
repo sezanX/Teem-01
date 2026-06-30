@@ -40,8 +40,8 @@ const RegistrationPage = () => {
       toast.error('Please enter a valid email address');
       return;
     }
-    if (formData.password.length < 6) {
-      toast.error('Password must be at least 6 characters');
+    if (formData.password.length < 8) {
+      toast.error('Password must be at least 8 characters');
       return;
     }
     if (formData.password !== formData.confirmPassword) {
@@ -64,7 +64,8 @@ const RegistrationPage = () => {
       toast.success('Account created successfully!');
       navigate('/dashboard');
     } catch (err) {
-      dispatch(loginFailure(err.response?.data?.message || 'Registration failed'));
+      const errorMsg = err.response?.data?.errors?.[0]?.msg || err.response?.data?.message || 'Registration failed';
+      dispatch(loginFailure(errorMsg));
     }
   };
 

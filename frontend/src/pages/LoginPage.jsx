@@ -22,8 +22,8 @@ const LoginPage = () => {
       toast.error('Please enter a valid email address');
       return;
     }
-    if (password.length < 6) {
-      toast.error('Password must be at least 6 characters');
+    if (password.length < 8) {
+      toast.error('Password must be at least 8 characters');
       return;
     }
 
@@ -34,7 +34,8 @@ const LoginPage = () => {
       toast.success('Successfully logged in!');
       navigate('/dashboard');
     } catch (err) {
-      dispatch(loginFailure(err.response?.data?.message || 'Login failed'));
+      const errorMsg = err.response?.data?.errors?.[0]?.msg || err.response?.data?.message || 'Login failed';
+      dispatch(loginFailure(errorMsg));
     }
   };
 
