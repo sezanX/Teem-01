@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { BrainCircuit } from 'lucide-react';
+import toast from 'react-hot-toast';
 import { loginStart, loginSuccess, loginFailure } from '../store/slices/authSlice';
 import api from '../services/api';
 
@@ -29,12 +30,26 @@ const RegistrationPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
+    // Client-side validation
+    if (formData.name.trim().length < 2) {
+      toast.error('Name must be at least 2 characters');
+      return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      toast.error('Please enter a valid email address');
+      return;
+    }
+    if (formData.password.length < 6) {
+      toast.error('Password must be at least 6 characters');
+      return;
+    }
     if (formData.password !== formData.confirmPassword) {
-      dispatch(loginFailure("Passwords do not match"));
+      toast.error('Passwords do not match');
       return;
     }
     if (!formData.agreeTerms) {
-      dispatch(loginFailure("You must agree to the Terms of Service"));
+      toast.error('You must agree to the Terms of Service');
       return;
     }
 
@@ -45,8 +60,8 @@ const RegistrationPage = () => {
         email: formData.email, 
         password: formData.password 
       });
-      // Assuming register returns { user, token } just like login
       dispatch(loginSuccess(response.data));
+      toast.success('Account created successfully!');
       navigate('/dashboard');
     } catch (err) {
       dispatch(loginFailure(err.response?.data?.message || 'Registration failed'));

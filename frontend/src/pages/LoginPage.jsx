@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { BrainCircuit } from 'lucide-react';
+import toast from 'react-hot-toast';
 import { loginStart, loginSuccess, loginFailure } from '../store/slices/authSlice';
 import api from '../services/api';
 
@@ -14,10 +15,23 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Client-side validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast.error('Please enter a valid email address');
+      return;
+    }
+    if (password.length < 6) {
+      toast.error('Password must be at least 6 characters');
+      return;
+    }
+
     dispatch(loginStart());
     try {
       const response = await api.post('/auth/login', { email, password });
       dispatch(loginSuccess(response.data));
+      toast.success('Successfully logged in!');
       navigate('/dashboard');
     } catch (err) {
       dispatch(loginFailure(err.response?.data?.message || 'Login failed'));

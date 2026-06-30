@@ -19,10 +19,13 @@ import AdminPanel from './pages/AdminPanel';
 
 import TermsOfService from './pages/TermsOfService';
 import PrivacyPolicy from './pages/PrivacyPolicy';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   return (
-    <Router>
+    <>
+      <Toaster position="top-right" />
+      <Router>
       <Routes>
         {/* Public Routes under MainLayout */}
         <Route element={<MainLayout />}>
@@ -54,7 +57,8 @@ function App() {
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-    </Router>
+      </Router>
+    </>
   );
 }
 
