@@ -66,9 +66,13 @@ const MainLayout = () => {
       </main>
 
       <footer className="bg-white border-t border-gray-200 mt-auto">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="text-center text-gray-500 text-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="text-gray-500 text-sm">
             &copy; {new Date().getFullYear()} AI Prompt Engineering Learning Hub. All rights reserved.
+          </div>
+          <div className="flex space-x-6 text-sm text-gray-500">
+            <Link to="/terms" className="hover:text-gray-900 transition-colors">Terms of Service</Link>
+            <Link to="/privacy" className="hover:text-gray-900 transition-colors">Privacy Policy</Link>
           </div>
         </div>
       </footer>

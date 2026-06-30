@@ -17,6 +17,9 @@ import Marketplace from './pages/Marketplace';
 import AdminLayout from './layouts/AdminLayout';
 import AdminPanel from './pages/AdminPanel';
 
+import TermsOfService from './pages/TermsOfService';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+
 function App() {
   return (
     <Router>
@@ -26,6 +29,8 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegistrationPage />} />
+          <Route path="/terms" element={<TermsOfService />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
 
           {/* Protected Routes for Students */}
           <Route element={<ProtectedRoute />}>
