@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Users, BookOpen, Trophy, TrendingUp, Search, Plus, Edit, Trash2, CheckCircle2 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
 import { BarChart3 } from 'lucide-react';
@@ -6,7 +7,8 @@ import api from '../services/api';
 import toast from 'react-hot-toast';
 
 const AdminPanel = () => {
-  const [activeTab, setActiveTab] = useState('Users'); // Users, Modules, Marketplace, Analytics
+  const [searchParams, setSearchParams] = useSearchParams();
+  const activeTab = searchParams.get('tab') || 'Users'; // Users, Modules, Marketplace, Analytics
   const [metrics, setMetrics] = useState({
     totalUsers: 0,
     activeModules: 0,
@@ -63,7 +65,7 @@ const AdminPanel = () => {
         {['Users', 'Modules', 'Marketplace', 'Analytics'].map((tab) => (
           <button
             key={tab}
-            onClick={() => setActiveTab(tab)}
+            onClick={() => setSearchParams({ tab })}
             className={`flex-1 py-2 px-4 text-sm font-medium rounded-md transition-colors whitespace-nowrap ${
               activeTab === tab ? 'bg-white text-gray-900 shadow' : 'text-gray-500 hover:text-gray-700'
             }`}
